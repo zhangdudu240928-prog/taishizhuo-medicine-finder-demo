@@ -142,7 +142,7 @@ function Icon({ name, size = 20, stroke = 2, className = '' }) {
 const demoDrug = {
   brand: '泰适卓',
   generic: '特泽利尤单抗注射液',
-  company: 'GSK',
+  company: '阿斯利康',
 };
 
 function App() {
