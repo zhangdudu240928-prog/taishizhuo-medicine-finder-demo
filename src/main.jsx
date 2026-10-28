@@ -140,14 +140,14 @@ function Icon({ name, size = 20, stroke = 2, className = '' }) {
 }
 
 const demoDrug = {
-  brand: '利必通',
-  generic: '拉莫三嗪',
+  brand: '泰适卓',
+  generic: '特泽利尤单抗注射液',
   company: 'GSK',
 };
 
 function App() {
   const [screen, setScreen] = React.useState('search');
-  const [query, setQuery] = React.useState('利必通找药');
+  const [query, setQuery] = React.useState('泰适卓找药');
   const [selectedId, setSelectedId] = React.useState('guomao');
   const [selectedFilters, setSelectedFilters] = React.useState(['离我最近']);
   const [typeFilter, setTypeFilter] = React.useState('全部');
@@ -241,7 +241,7 @@ function App() {
 
           <section className="suggestion-section ordinary-suggestions">
             <div className="section-label">搜索建议</div>
-            {['利必通', '拉莫三嗪', '拉莫三嗪片'].map((item) => (
+            {['泰适卓', '特泽利尤单抗', '特泽利尤单抗注射液'].map((item) => (
               <button key={item} onClick={() => setQuery(item)} className="ordinary-sug">
                 <Icon name="search" size={17} />
                 <span>{item}</span>
