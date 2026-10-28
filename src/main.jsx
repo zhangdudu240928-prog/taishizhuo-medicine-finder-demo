@@ -161,12 +161,18 @@ function App() {
   const drugName = query.replace(/找药/g, '').trim() || demoDrug.brand;
   const selected = allPois.find((poi) => poi.id === selectedId) ?? allPois[0];
 
-  const showSearchSuggestions = () => {
-    if (!query.trim()) {
-      notify('请输入药品通用名');
+  const submitSearch = (event) => {
+    event.preventDefault();
+    const searchTerm = query.replace(/找药/g, '').trim();
+    if (!searchTerm) {
+      notify('请输入药品名称或通用名');
       return;
     }
-    notify('已为你匹配找药地图服务');
+    setQuery(searchTerm);
+    setEmptyMode(false);
+    setNotice('');
+    document.activeElement?.blur();
+    setScreen('map');
   };
   const filteredPois = allPois.filter((poi) => {
     if (typeFilter === '药店' && poi.type !== 'pharmacy') return false;
@@ -207,28 +213,35 @@ function App() {
         </header>
 
         <main className="search-content">
-          <div className="search-row">
-            <div className="search-input-wrap active">
+          <form className="search-row" onSubmit={submitSearch}>
+            <div className="search-input-wrap">
               <Icon name="search" size={19} />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                onKeyDown={(event) => event.key === 'Enter' && showSearchSuggestions()}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && event.nativeEvent.isComposing) event.preventDefault();
+                }}
                 aria-label="搜索药品"
-                autoFocus
+                placeholder="输入药品名称或通用名"
+                enterKeyHint="search"
+                autoComplete="off"
               />
               {query && (
-                <button className="clear-button" onClick={() => setQuery('')} aria-label="清空搜索">
+                <button type="button" className="clear-button" onClick={(event) => {
+                  setQuery('');
+                  event.currentTarget.parentElement.querySelector('input').focus();
+                }} aria-label="清空搜索">
                   <Icon name="close" size={14} stroke={2.5} />
                 </button>
               )}
             </div>
-            <button className="search-action" onClick={showSearchSuggestions}>搜索</button>
-          </div>
+            <button type="submit" className="search-action">搜索</button>
+          </form>
 
           <section className="suggestion-section">
             <div className="section-label">找药服务</div>
-            <button className="finder-sug" onClick={() => setScreen('map')}>
+            <button className="finder-sug" onClick={submitSearch}>
               <span className="finder-sug-icon"><Icon name="map" size={20} /></span>
               <span className="finder-sug-copy">
                 <strong>找附近可咨询{drugName}的药店</strong>
